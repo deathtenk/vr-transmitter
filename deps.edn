@@ -4,13 +4,13 @@
         io.pedestal/pedestal.jetty {:mvn/version "0.5.7"}
         com.yetanalytics/kafka-messenger
         {:git/url "git@github.com:yetanalytics/kafka-messenger"
-         :sha "3cbd344fa0e163d467f46a1ed9e5e70868b6fb53"}}
+         :sha "3cbd344fa0e163d467f46a1ed9e5e70868b6fb53"}
+        com.yetanalytics/kafka-server
+        {:git/url "git@github.com:yetanalytics/kafka-server"
+         :sha "dd9803f041a38fea7322b7296f05ddeaea629725"}}
  :aliases
  {:test {:extra-paths ["test"]
-         :extra-deps {org.clojure/test.check {:mvn/version "RELEASE"}
-                      com.yetanalytics/kafka-server
-                      {:git/url "git@github.com:yetanalytics/kafka-server"
-                       :sha "dd9803f041a38fea7322b7296f05ddeaea629725"}}}
+         :extra-deps {org.clojure/test.check {:mvn/version "RELEASE"}}}
   :runner
   {:extra-deps {com.cognitect/test-runner
                 {:git/url "https://github.com/cognitect-labs/test-runner"
