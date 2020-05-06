@@ -26,8 +26,6 @@
       http/create-server
       http/start))
 
-(defn -main
-  "The entry-point for 'lein run'"
-  [& args]
-  (println "\nCreating your server...")
+
+(defn run [& args]
   (http/start runnable-service))

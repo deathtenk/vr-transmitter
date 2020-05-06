@@ -1,7 +1,12 @@
 (ns deathtenk.vr-transmitter
-  (:gen-class))
+  (:gen-class)
+  (:require [deathtenk.vr-transmitter.server :as s]))
+
+(def dev? (System/getenv "DEV"))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Entrypoint for vr-transmitter"
   [& args]
-  (println "Hello, World!"))
+  (if dev?
+    (s/run-dev)
+    (s/run)))
