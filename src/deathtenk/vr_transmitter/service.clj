@@ -2,7 +2,9 @@
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
-            [io.pedestal.http.route.definition :refer [defroutes]]))
+            [io.pedestal.http.route.definition :refer [defroutes]]
+            [kafka-messenger.serializer :as ser]
+            [kafka-messenger.producer :as p]))
 
 (defn hello-world
   [request]
