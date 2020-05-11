@@ -2,6 +2,11 @@
 
 FIXME: description
 
+## Env Vars
+
+BOOTSTRAP_SERVER - URL for the kafka brokers
+INPUT_TOPIC - the input topic where data gets dumped (default: vrdata)
+
 ## Usage
 
 Run the project directly:
@@ -24,9 +29,10 @@ Run the nrepl (requires nrepl profile in .clojure profile)
 
 FIXME: listing of options this app accepts.
 
-## Examples
+## Endpoints
 
-...
+get "/" - Health Check
+post "/vr" - Takes a JSON body thats a valid ::openvr object and posts it to INPUT_TOPIC on BOOTSTRAP_SERVER
 
 ### Bugs
 
