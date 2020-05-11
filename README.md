@@ -1,11 +1,11 @@
 # vr-transmitter
 
-FIXME: description
+simple handler that puts OpenVR events on a kafka stream
 
 ## Env Vars
 
-BOOTSTRAP_SERVER - URL for the kafka brokers
-INPUT_TOPIC - the input topic where data gets dumped (default: vrdata)
+- BOOTSTRAP_SERVER - URL for the kafka brokers
+- INPUT_TOPIC - the input topic where data gets dumped (default: vrdata)
 
 ## Usage
 
@@ -31,8 +31,8 @@ FIXME: listing of options this app accepts.
 
 ## Endpoints
 
-get "/" - Health Check
-post "/vr" - Takes a JSON body thats a valid ::openvr object and posts it to INPUT_TOPIC on BOOTSTRAP_SERVER
+- get "/" - Health Check
+- post "/vr" - Takes a JSON body thats a valid ::openvr object and posts it to INPUT_TOPIC on BOOTSTRAP_SERVER
 
 ### Bugs
 
