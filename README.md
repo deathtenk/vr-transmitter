@@ -2,13 +2,7 @@
 
 FIXME: description
 
-## Installation
-
-Download from http://example.com/FIXME.
-
 ## Usage
-
-FIXME: explanation
 
 Run the project directly:
 
@@ -17,6 +11,14 @@ Run the project directly:
 Run the project's tests (they'll fail until you edit them):
 
     $ clj -A:test:runner
+
+Run the project as a headless application
+    
+    $ make run-dev
+
+Run the nrepl (requires nrepl profile in .clojure profile)
+
+    $ make nrepl
 
 ## Options
 
