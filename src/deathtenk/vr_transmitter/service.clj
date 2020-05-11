@@ -57,10 +57,15 @@
                            {:producer.config/bootstrap-servers-config bootstrap-server}}))
 
 
-(defn kafka-send [data]
+(defn kafka-send [producer data]
   (p/async-send! producer {:topic input-topic
                            :key nil
                            :value data}))
+
+(def attach-producer
+  (i/interceptor {:name ::attach-producer
+                  :enter (fn [ctx]
+                           (assoc ctx ::producer producer))}))
                     
 
 (def parse 
@@ -70,40 +75,47 @@
                              (assoc ctx ::vrdata vrdata)))}))
 
 (def validate
-  (i/interceptor :name ::validate
-                 :enter (fn [ctx]
-                          (let [vrdata (get ctx ::vrdata)]
-                            (if (s/valid? ::openvr-data vrdata)
-                              ctx
-                              (assoc ctx ::invalid? true
-                                         ::reason (s/explain ::openvr-data vrdata)))))))
+  (i/interceptor {:name ::validate
+                  :enter (fn [ctx]
+                           (let [vrdata (get ctx ::vrdata)]
+                             (if (s/valid? ::openvr-data vrdata)
+                               ctx
+                               (assoc ctx ::invalid? true
+                                          ::reason (s/explain-data ::openvr-data vrdata)))))}))
+
 
 (def result
-  (i/interceptor :name ::result
-                 :enter (fn [ctx]
-                          (let [invalid? (get ctx ::invalid?)
-                                reason (get ctx ::reason)]
-                            (if invalid?
-                              (rr/bad-request reason)
-                              (let [vrdata (get ctx ::vrdata)]
-                                (kafka-send vrdata)
-                                (rr/response vrdata)))))))
+  (i/interceptor {:name ::result
+                  :enter (fn [ctx]
+                           (let [invalid? (get ctx ::invalid?)
+                                 reason (get ctx ::reason)]
+                             (if invalid?
+                               (do
+                                (println "BAD REQUEST! reason: " reason)
+                                (assoc ctx :response (rr/bad-request reason)))
+                               (let [vrdata (get ctx ::vrdata)
+                                     producer (get ctx ::producer)]
+                                 (kafka-send producer vrdata)
+                                 (assoc ctx :response (rr/response vrdata))))))}))
                                 
                               
 (defn hello-world
   [request]
-  (let [name (get-in request [:params :name] "World")]
-    {:status 200 :body (str "Hello " name "!\n")}))
+  {:status 200
+   :body "healthy!"})
 
 
-(def common-interceptors [(bp/body-params)])
+(def common-interceptors 
+  [(bp/body-params)])
 
 (def routes
-  #{["/health" :get `hello-world]
-    ["/vr" :post (conj common-interceptors
-                       parse
-                       validate
-                       result)]})
+  #{["/" :get `hello-world]
+    ["/vr" :post 
+     (conj common-interceptors
+           attach-producer
+           parse
+           validate
+           result)]})
 
 (def service {:env                 :prod
               ::http/routes        routes

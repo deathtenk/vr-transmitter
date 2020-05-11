@@ -13,5 +13,5 @@
   [& args]
   (if dev?
     (do (kserver)
-        (s/run-dev))
+        (s/run))
     (s/run)))
